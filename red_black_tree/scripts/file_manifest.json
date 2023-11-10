@@ -1,0 +1,23 @@
+{
+    "0-rb_tree_node.c": {
+        "function_prototype": "rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color)",
+        "associated_files": ["rb_tree_print.c"]
+    },
+    "1-rb_tree_is_valid.c": {
+        "function_prototype": "int rb_tree_is_valid(const rb_tree_t *tree)",
+        "associated_files": ["1-rb_tree_is_valid.c", "0-rb_tree_node.c", "rb_tree_print.c"]
+    },
+    "2-rb_tree_insert.c": {
+        "function_prototype": "rb_tree_t *rb_tree_insert(rb_tree_t **tree, int value)",
+        "associated_files": ["0-rb_tree_node.c", "2-rb_tree_insert.c", "rb_tree_print.c"]
+    },
+    "3-array_to_rb_tree.c": {
+        "function_prototype": "rb_tree_t *array_to_rb_tree(int *array, size_t size)",
+        "associated_files": ["0-rb_tree_node.c", "2-rb_tree_insert.c", "3-array_to_rb_tree.c", "rb_tree_print.c"]
+    },
+    "4-rb_tree_remove.c": {
+        "function_prototype": "rb_tree_t *rb_tree_remove(rb_tree_t *root, int n)",
+        "associated_files": ["0-rb_tree_node.c"]
+    }
+}
+
