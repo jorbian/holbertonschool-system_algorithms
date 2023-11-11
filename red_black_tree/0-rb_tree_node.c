@@ -5,7 +5,7 @@
  * @parent: the parent node that it's being added to
  * @value: the value that needs to be placed in the node
  * @color: the color the new node is supposed to have
- * 
+ *
  * Return: a pointer to the newly allocated node
 */
 rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color)
