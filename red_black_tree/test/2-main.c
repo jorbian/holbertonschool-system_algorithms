@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "rb_trees.h"
+#include "../rb_trees.h"
 
 void rb_tree_print(const rb_tree_t *tree);
 

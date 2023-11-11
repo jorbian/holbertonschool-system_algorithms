@@ -9,8 +9,8 @@
 */
 rb_tree_t *rb_tree_remove(rb_tree_t *root, int n)
 {
-	(void *)root;
-	(void *)n;
+	(void)root;
+	(void)n;
 
 	return (NULL);
 }

@@ -9,8 +9,8 @@
 */
 rb_tree_t *array_to_rb_tree(int *array, size_t size)
 {
-	(void *)array;
-	(void *)size;
+	(void)array;
+	(void)size;
 
 	return (NULL);
 }
