@@ -74,10 +74,9 @@ static int validate_colors(rb_tree_t *tree)
 
 	if (color == BLACK)
 	{
-		if (
-			(tree->left && (tree->left)->color == RED) ||
-			(tree->right && (tree->right)->color == RED)
-		)
+		if (tree->left && (tree->left)->color == RED)
+			return (0);
+		if (tree->right && (tree->right)->color == RED)
 			return (0);
 	}
 	return (
