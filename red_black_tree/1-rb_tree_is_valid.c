@@ -65,19 +65,19 @@ static int validate_colors(rb_tree_t *tree)
 	rb_color_t color;
 
 	if (tree == NULL)
-		return (TRUE);
+		return (1);
 
 	color = tree->color;
 
 	if (!IN_RANGE(color, RED, BLACK))
-		return (FALSE);
+		return (0);
 
 	if (!color)
 	{
 		if (tree->left && (tree->left)->color == RED)
-			return (FALSE);
+			return (0);
 		if (tree->right && (tree->right)->color == RED)
-			return (FALSE);
+			return (0);
 	}
 	return (
 		validate_colors(tree->left) &&
