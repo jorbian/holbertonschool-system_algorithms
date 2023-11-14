@@ -72,7 +72,7 @@ static int validate_colors(rb_tree_t *tree)
 	if (!IN_RANGE(color, RED, BLACK))
 		return (0);
 
-	if (color == BLACK)
+	if (tree->color == RED)
 	{
 		if (tree->left && (tree->left)->color == RED)
 			return (0);
