@@ -61,7 +61,7 @@ int main(void)
     valid = rb_tree_is_valid(root);
     printf("Is %d valid: %d\n", root->n, valid);
 
-    root->color = RED;
+    root->colour = RED;
     rb_tree_print(root);
     valid = rb_tree_is_valid(root);
     printf("Is %d valid: %d\n", root->n, valid);
