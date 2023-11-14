@@ -116,10 +116,13 @@ static size_t count_black_nodes(rb_tree_t *root)
 */
 int rb_tree_is_valid(rb_tree_t *tree)
 {
-	return (
-		(tree != NULL) &&
-		(tree->color == BLACK) &&
-		(validate_colors(tree) && validate_bst(tree)) &&
-		(rb_height(tree) < (2 * count_black_nodes(tree)))
-	);
+	if (
+		(tree == NULL) ||
+		(tree->color != BLACK) ||
+		(!validate_colors(tree) || !validate_bst(tree)) ||
+		(rb_height(tree) > (2 * count_black_nodes(tree)))
+	)
+		return (0);
+
+	return (1);
 }
