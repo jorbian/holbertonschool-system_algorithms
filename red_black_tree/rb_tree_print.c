@@ -24,7 +24,7 @@ static int rb_print_t(const rb_tree_t *tree, int offset, int depth, char **s)
 	if (!tree)
 		return (0);
 	is_left = (tree->parent && tree->parent->left == tree);
-	width = sprintf(b, "%c(%03d)", (tree->colour == RED ? 'R' : 'B'), tree->n);
+	width = sprintf(b, "%c(%03d)", (tree->color == RED ? 'R' : 'B'), tree->n);
 	left = rb_print_t(tree->left, offset, depth + 1, s);
 	right = rb_print_t(tree->right, offset + left + width, depth + 1, s);
 	for (i = 0; i < width; i++)

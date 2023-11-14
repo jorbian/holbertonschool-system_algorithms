@@ -55,33 +55,33 @@ static int validate_bst(rb_tree_t *tree)
 }
 
 /**
- * validate_colours - Go down each node of tree to see if it's painted right
- * @tree: The tree to check the colours of
+ * validate_colors - Go down each node of tree to see if it's painted right
+ * @tree: The tree to check the colors of
  *
  * Return: 1/true if true, 0/false if false
 */
-static int validate_colours(rb_tree_t *tree)
+static int validate_colors(rb_tree_t *tree)
 {
-	rb_colour_t colour;
+	rb_color_t color;
 
 	if (tree == NULL)
 		return (TRUE);
 
-	colour = tree->colour;
+	color = tree->color;
 
-	if (!IN_RANGE(colour, RED, BLACK))
+	if (!IN_RANGE(color, RED, BLACK))
 		return (FALSE);
 
-	if (!colour)
+	if (!color)
 	{
-		if (tree->left && (tree->left)->colour == RED)
+		if (tree->left && (tree->left)->color == RED)
 			return (FALSE);
-		if (tree->right && (tree->right)->colour == RED)
+		if (tree->right && (tree->right)->color == RED)
 			return (FALSE);
 	}
 	return (
-		validate_colours(tree->left) &&
-		validate_colours(tree->right)
+		validate_colors(tree->left) &&
+		validate_colors(tree->right)
 	);
 }
 
@@ -102,7 +102,7 @@ static size_t count_black_nodes(rb_tree_t *root)
 		count_black_nodes(root->left),
 		count_black_nodes(root->right)
 	);
-	if (root->colour == BLACK)
+	if (root->color == BLACK)
 		height++;
 
 	return (height);
@@ -118,8 +118,8 @@ int rb_tree_is_valid(rb_tree_t *tree)
 {
 	return (
 		(tree != NULL) &&
-		(tree->colour == BLACK) &&
-		(validate_colours(tree) && validate_bst(tree)) &&
+		(tree->color == BLACK) &&
+		(validate_colors(tree) && validate_bst(tree)) &&
 		(rb_height(tree) < (2 * count_black_nodes(tree)))
 	);
 }

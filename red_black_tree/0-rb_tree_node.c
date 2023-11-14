@@ -4,11 +4,11 @@
  * rb_tree_node - allocate a red-black tree node and initalize values
  * @parent: the parent node that it's being added to
  * @value: the value that needs to be placed in the node
- * @colour: the colour the new node is supposed to have
+ * @color: the color the new node is supposed to have
  *
  * Return: a pointer to the newly allocated node
 */
-rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_colour_t colour)
+rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color)
 {
 	rb_tree_t *new;
 
@@ -17,7 +17,7 @@ rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_colour_t colour)
 		return (NULL);
 
 	new->n = value;
-	new->colour = colour;
+	new->color = color;
 	new->parent = parent;
 
 	new->left = NULL;
