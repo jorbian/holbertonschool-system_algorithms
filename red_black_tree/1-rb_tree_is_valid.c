@@ -96,7 +96,7 @@ static size_t count_black_nodes(rb_tree_t *root)
 	int height;
 
 	if (root == NULL)
-		return (FALSE);
+		return (0);
 
 	height = MAX(
 		count_black_nodes(root->left),
