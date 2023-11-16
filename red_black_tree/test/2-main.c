@@ -31,6 +31,7 @@ int main(void)
     printf("Inserted: %d\n", node->n);
     rb_tree_print(root);
     node = rb_tree_insert(&root, 128);
+    
     printf("Inserted: %d\n", node->n);
     rb_tree_print(root);
     node = rb_tree_insert(&root, 256);

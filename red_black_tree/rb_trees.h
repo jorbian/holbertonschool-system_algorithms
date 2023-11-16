@@ -1,22 +1,23 @@
-#ifndef _RB_TREES_H_
-#define _RB_TREES_H_
+#ifndef _RB_TREES_
+#define _RB_TREES_
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
 
-#define TRUE 1
-#define FALSE 0
-
-#define MAX(x, y)  (x - ((x - y) & -(x < y)))
-#define IN_RANGE(z, x, y) (((z) >= (x)) & ((z) <= (y)))
+#define IS_LEFT_CHILD(n) (\
+	(n->parent != NULL) && \
+	(n->parent->left != NULL) && \
+	(n->parent->left == n) \
+)
+#define IN_ATTENDANCE(p, g) (p != NULL && g != NULL)
+#define BIT_SET(n, k) (((n >> (k - 1)) & 1) == 1)
 
 /**
  * enum rb_color_e - Possible color of a Red-Black tree
  *
  * @RED: 0 -> Red node
  * @BLACK: 1 -> Black node
- * @DOUBLE_BLACK: 2 -> Double-black node (used for deletion)
  */
 typedef enum rb_color_e
 {
@@ -32,7 +33,7 @@ typedef enum rb_color_e
  * @parent: Pointer to the parent node
  * @left: Pointer to the left child node
  * @right: Pointer to the right child node
- * @color: color of the node (RED or BLACK)
+ * @color: Color of the node (RED or BLACK)
  */
 typedef struct rb_tree_s
 {
@@ -44,9 +45,8 @@ typedef struct rb_tree_s
 } rb_tree_t;
 
 rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color);
-int rb_tree_is_valid(rb_tree_t *tree);
+int rb_tree_is_valid(const rb_tree_t *tree);
 rb_tree_t *rb_tree_insert(rb_tree_t **tree, int value);
-rb_tree_t *array_to_rb_tree(int *array, size_t size);
-rb_tree_t *rb_tree_remove(rb_tree_t *root, int n);
-
-#endif /* _RB_TREES_H_ */
+rb_tree_t *left_rotate(rb_tree_t *tree);
+rb_tree_t *right_rotate(rb_tree_t *tree);
+#endif
