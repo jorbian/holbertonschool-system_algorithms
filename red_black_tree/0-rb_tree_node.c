@@ -30,6 +30,22 @@ rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color)
 }
 
 /**
+ * put_in_place - places the new root in place.
+ * @roots: an array containing the new and old roots
+ *
+*/
+static void put_in_place(rb_tree_t **roots)
+{
+	if (roots[OLD]->parent)
+	{
+		if (roots[OLD] == roots[OLD]->parent->left)
+			roots[OLD]->parent->left = roots[NEW];
+		else
+			roots[OLD]->parent->right = roots[NEW];
+	}
+}
+
+/**
  * left_rotate - Rotates a binary search tree clockwise
  * @tree: The binary search tree to rotate
  *
@@ -45,6 +61,7 @@ rb_tree_t *left_rotate(rb_tree_t *tree)
 
 	roots[OLD] = tree;
 	roots[NEW] = tree->right;
+
 	if (tree->right->left)
 	{
 		old_left = tree->right->left;
@@ -53,13 +70,9 @@ rb_tree_t *left_rotate(rb_tree_t *tree)
 	}
 	else
 		roots[OLD]->right = NULL;
-	if (roots[OLD]->parent)
-	{
-		if (roots[OLD] == roots[OLD]->parent->left)
-			roots[OLD]->parent->left = roots[NEW];
-		else
-			roots[OLD]->parent->right = roots[NEW];
-	}
+
+	put_in_place((rb_tree_t **)&roots);
+
 	roots[NEW]->parent = roots[OLD]->parent;
 	roots[OLD]->parent = roots[NEW];
 	roots[NEW]->left = roots[OLD];
@@ -93,13 +106,8 @@ rb_tree_t *right_rotate(rb_tree_t *tree)
 	else
 		roots[OLD]->left = NULL;
 
-	if (roots[OLD]->parent)
-	{
-		if (roots[OLD] == roots[OLD]->parent->left)
-			roots[OLD]->parent->left = roots[NEW];
-		else
-			roots[OLD]->parent->right = roots[NEW];
-	}
+	put_in_place((rb_tree_t **)&roots);
+
 	roots[NEW]->parent = tree->parent;
 	roots[NEW]->right = roots[OLD];
 	roots[OLD]->parent = roots[NEW];
