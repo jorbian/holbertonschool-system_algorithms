@@ -1,28 +1,28 @@
 #include "rb_trees.h"
 
-/**
- * rb_tree_node - creates a new node for a RB tree
- * @parent: pointer to parent node of the newly created node
- * @value: the value to be stored in the new node
- * @color: color of the newly created node
- * Return: pointer to the new node, NULL on error
-*/
+#define NEW 0
+#define OLD 1
 
+/**
+ * rb_tree_node - allocate a red-black tree node and initalize values
+ * @parent: the parent node that it's being added to
+ * @value: the value that needs to be placed in the node
+ * @color: the color the new node is supposed to have
+ *
+ * Return: a pointer to the newly allocated node
+*/
 rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color)
 {
 	rb_tree_t *new;
 
 	new = malloc(sizeof(rb_tree_t));
-	if (!new)
+	if (new == NULL)
 		return (NULL);
-	if (!parent)
-		parent = NULL;
-	new->parent = parent;
+
 	new->n = value;
-	if (!color)
-		new->color = RED;
-	else
-		new->color = RED;
+	new->color = color;
+	new->parent = parent;
+
 	new->left = NULL;
 	new->right = NULL;
 
@@ -30,75 +30,79 @@ rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color)
 }
 
 /**
- * left_rotate - balances a tree by rotating nodes left
- * @tree: pointer to the root of a tree
- * Return: pointer to the new root
+ * left_rotate - Rotates a binary search tree clockwise
+ * @tree: The binary search tree to rotate
+ *
+ * Return: The newly rotated binary search tree
 */
 rb_tree_t *left_rotate(rb_tree_t *tree)
 {
-	rb_tree_t *new_root, *old_root, *old_left;
+	rb_tree_t *roots[2] = {NULL, NULL};
+	rb_tree_t *old_left;
 
-	if (tree == NULL || tree->right == NULL)
+	if (!tree || !tree->right)
 		return (tree);
 
-	old_root = tree;
-	new_root = tree->right;
+	roots[OLD] = tree;
+	roots[NEW] = tree->right;
 	if (tree->right->left)
 	{
 		old_left = tree->right->left;
-		old_left->parent = old_root;
-		old_root->right = old_left;
+		old_left->parent = roots[OLD];
+		roots[OLD]->right = old_left;
 	}
 	else
-		old_root->right = NULL;
-	if (old_root->parent)
+		roots[OLD]->right = NULL;
+	if (roots[OLD]->parent)
 	{
-		if (old_root == old_root->parent->left)
-			old_root->parent->left = new_root;
+		if (roots[OLD] == roots[OLD]->parent->left)
+			roots[OLD]->parent->left = roots[NEW];
 		else
-			old_root->parent->right = new_root;
+			roots[OLD]->parent->right = roots[NEW];
 	}
-	new_root->parent = old_root->parent;
-	old_root->parent = new_root;
-	new_root->left = old_root;
+	roots[NEW]->parent = roots[OLD]->parent;
+	roots[OLD]->parent = roots[NEW];
+	roots[NEW]->left = roots[OLD];
 
-	return (new_root);
+	return (roots[NEW]);
 }
 
 /**
- * right_rotate - balances a tree by rotating nodes right
- * @tree: pointer to the root of a tree
- * Return: pointer to the new root
+ * right_rotate - Rotates a binary search tree clockwise
+ * @tree: The binary search tree to rotate
+ *
+ * Return: The newly rotated binary search tree
 */
 rb_tree_t *right_rotate(rb_tree_t *tree)
 {
-	rb_tree_t *old_root, *new_root, *old_right;
+	rb_tree_t *roots[2] = {NULL, NULL};
+	rb_tree_t *old_right;
 
-	if (tree == NULL || tree->left == NULL)
+	if (!tree || !tree->left)
 		return (tree);
 
-	old_root = tree;
-	new_root = tree->left;
+	roots[OLD] = tree;
+	roots[NEW] = tree->left;
 
 	if (tree->left->right)
 	{
 		old_right = tree->left->right;
-		old_right->parent = old_root;
-		old_root->left = old_right;
+		old_right->parent = roots[OLD];
+		roots[OLD]->left = old_right;
 	}
 	else
-		old_root->left = NULL;
+		roots[OLD]->left = NULL;
 
-	if (old_root->parent)
+	if (roots[OLD]->parent)
 	{
-		if (old_root == old_root->parent->left)
-			old_root->parent->left = new_root;
+		if (roots[OLD] == roots[OLD]->parent->left)
+			roots[OLD]->parent->left = roots[NEW];
 		else
-			old_root->parent->right = new_root;
+			roots[OLD]->parent->right = roots[NEW];
 	}
-	new_root->parent = tree->parent;
-	new_root->right = old_root;
-	old_root->parent = new_root;
+	roots[NEW]->parent = tree->parent;
+	roots[NEW]->right = roots[OLD];
+	roots[OLD]->parent = roots[NEW];
 
-	return (new_root);
+	return (roots[NEW]);
 }

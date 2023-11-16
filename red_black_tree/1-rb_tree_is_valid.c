@@ -56,7 +56,7 @@ static int color_check_r(rb_tree_t *node)
 		if (!color_check_r(node->right))
 			return (0);
 		if (!color_check_r(node->left))
-			return (0);		
+			return (0);
 	}
 	return (1);
 
@@ -83,12 +83,12 @@ static int check_black_height_r(rb_tree_t *tree)
 
 	l_height = check_black_height_r(tree->left) + l_black;
 	r_height = check_black_height_r(tree->right) + r_black;
-	
+
 	if (l_height != r_height)
 		return (0);
 
 	return (l_height);
-	
+
 }
 /**
  * rb_tree_is_valid - checks if a tree is valid Red_Black Tree
@@ -98,7 +98,11 @@ static int check_black_height_r(rb_tree_t *tree)
 int rb_tree_is_valid(const rb_tree_t *tree)
 {
 	rb_tree_t *node;
+
 	node = malloc(sizeof(rb_tree_t));
+	if (node == NULL)
+		return (0);
+
 	*node = *tree;
 
 	if (is_bst(node) && color_check_r(node) && check_black_height_r(node))
