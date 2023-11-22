@@ -57,7 +57,6 @@ struct vertex_s
 /**
  * struct graph_s - Representation of a graph
  * We use an adjacency linked list to represent our graph
- *
  * @nb_vertices: Number of vertices in our graph
  * @vertices: Pointer to the head node of our adjacency linked list
  */

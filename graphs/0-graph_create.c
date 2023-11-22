@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 #include "graphs.h"
 
 /**
@@ -9,5 +7,11 @@
 */
 graph_t *graph_create(void)
 {
+	graph_t *new_graph;
+
+	new_graph = malloc(sizeof(graph_t));
+	if (new_graph == NULL)
+		return (NULL);
+
 	return (NULL);
 }
