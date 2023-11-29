@@ -19,6 +19,8 @@ typedef struct binary_tree_node_s
 	struct binary_tree_node_s *parent;
 } node_t;
 
+typedef node_t binary_tree_node_t;
+
 /**
  * struct heap_s - Heap data structure
  *
