@@ -28,9 +28,9 @@ typedef struct binary_tree_node_s
  */
 typedef struct heap_s
 {
-    size_t size;
-    int (*data_cmp)(void *, void *);
-    node_t *root;
+	size_t size;
+	int (*data_cmp)(void *, void *);
+	node_t *root;
 } heap_t;
 
 heap_t *heap_create(int (*data_cmp)(void *, void *));
