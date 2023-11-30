@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "heap.h"
+#include "./heap/heap.h"
 
 /* Original code from http://stackoverflow.com/a/13755911/5184480 */
 
