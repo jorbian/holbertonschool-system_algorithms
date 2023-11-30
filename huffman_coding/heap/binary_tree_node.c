@@ -23,5 +23,5 @@ node_t *binary_tree_node(node_t *parent, void *data)
 	new_node->left = NULL;
 	new_node->right = NULL;
 
-	return (NULL);
+	return (new_node);
 }
