@@ -12,8 +12,16 @@
 */
 node_t *binary_tree_node(node_t *parent, void *data)
 {
-	(void)parent;
-	(void)data;
+	node_t *new_node;
+
+	new_node = malloc(sizeof(node_t));
+	if (new_node == NULL)
+		return (NULL);
+
+	new_node->data = data;
+	new_node->parent = parent;
+	new_node->left = NULL;
+	new_node->right = NULL;
 
 	return (NULL);
 }
