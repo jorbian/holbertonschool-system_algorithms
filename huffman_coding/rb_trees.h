@@ -1,5 +1,5 @@
-#ifndef _RB_TREES_H_
-#define _RB_TREES_H_
+#ifndef _RB_TREES_H
+#define _RB_TREES_H
 
 /**
  * enum rb_color_e - Possible color of a Red-Black tree
@@ -33,4 +33,4 @@ typedef struct rb_tree_s
 	struct rb_tree_s *right;
 } rb_tree_t;
 
-#endif /* _RB_TREES_H_ */
+#endif /* _RB_TREES_H */
