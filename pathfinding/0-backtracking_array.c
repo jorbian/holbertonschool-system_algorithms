@@ -18,5 +18,11 @@ queue_t *backtracking_array(
 	point_t const *target
 )
 {
+	(void)map;
+	(void)rows;
+	(void)cols;
+	(void)start;
+	(void)target;
+
 	return (NULL);
 }

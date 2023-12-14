@@ -14,5 +14,9 @@ queue_t *backtracking_graph(
 	vertex_t const *target
 )
 {
+	(void)graph;
+	(void)start;
+	(void)target;
+
 	return (NULL);
 }
