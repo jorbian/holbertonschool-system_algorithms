@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define NODE_WAS_NOT_COPIED(n, s) (copy_content(n, s) == NULL)
+
 /**
  * struct nary_tree_s - N-ary tree node structure
  *
