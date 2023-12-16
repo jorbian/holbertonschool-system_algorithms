@@ -45,7 +45,6 @@ nary_tree_t *nary_tree_insert(nary_tree_t *parent, char const *str)
 	{
 		return (NULL);
 	}
-	printf("%s\n", new_node->content);
 	new_node->parent = parent;
 	new_node->nb_children = 0;
 	new_node->children = NULL;
