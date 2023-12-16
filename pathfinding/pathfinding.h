@@ -16,6 +16,19 @@ typedef struct point_s
 	int y;
 } point_t;
 
+/**
+ * struct point_s - Structure storing coordinates
+ * @map: pointer to a read-only two-dimensional array
+ * @rows: X coordinate
+ * @cols: Y coordinate
+ */
+typedef struct map_s
+{
+	char **map;
+	int rows;
+	int cols;
+} map_t;
+
 queue_t *backtracking_array(
 	char **map,
 	int rows,
