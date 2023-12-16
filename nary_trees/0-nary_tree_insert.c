@@ -19,8 +19,6 @@ static nary_tree_t *copy_content(nary_tree_t *node, char const *str)
 		strcpy(node->content, str);
 		return (node);
 	}
-	free(node->content);
-
 	return (NULL);
 }
 
@@ -47,6 +45,7 @@ nary_tree_t *nary_tree_insert(nary_tree_t *parent, char const *str)
 	{
 		return (NULL);
 	}
+	printf("%s\n", new_node->content);
 	new_node->parent = parent;
 	new_node->nb_children = 0;
 	new_node->children = NULL;
