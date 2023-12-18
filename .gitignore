@@ -54,5 +54,5 @@ dkms.conf
 **/test/**
 **/garb/**
 **/.vscode/**
-**/*-main.c
+**/*-main*.c
 **/*-libs/**

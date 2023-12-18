@@ -20,6 +20,20 @@ static nary_tree_t *free_node(nary_tree_t *node)
 }
 
 /**
+ * initalize_fields - initalize fields of node to default values
+ * @node: the new node being created
+ * @content: a pointer to whatever it contains
+ *
+*/
+static void initalize_fields(nary_tree_t *node, char *content)
+{
+	node->children = NULL;
+	node->content = content;
+	node->nb_children = 0;
+	node->next = NULL;
+}
+
+/**
  * nary_tree_insert - function that inserts a node in a N-ary tree.
  * @parent: a pointer to the parent node.
  * @str: string to be stored in the created node. It must be duplicated.
@@ -40,10 +54,8 @@ nary_tree_t *nary_tree_insert(nary_tree_t *parent, char const *str)
 	if (node_content == NULL)
 		return (free_node(new_node));
 
-	new_node->children = NULL;
-	new_node->content = node_content;
-	new_node->nb_children = 0;
-	new_node->next = NULL;
+	initalize_fields(new_node, node_content);
+
 	new_node->parent = parent;
 
 	if (parent)
