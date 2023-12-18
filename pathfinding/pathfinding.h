@@ -4,6 +4,10 @@
 #include "graphs.h"
 #include "queues.h"
 
+#define REACHED_TARGET(t, x, y) (x == target->x && y == target->y)
+#define CHECK_SIDE(axis, value) ((axis < 0) || (x >= value))
+#define CANT_BACKTRACK(x, y, c, r, m) ((CHECK_SIDE(x, c)) || CHECK_SIDE(y, r) || (m[y][x] != '0'))
+
 /**
  * struct point_s - Structure storing coordinates
  *

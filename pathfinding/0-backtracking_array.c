@@ -1,90 +1,74 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "pathfinding.h"
 
-static map_t *copy_map_data(map_t *new_map, char **map_data);
-static map_t *init_map_struct(char **map, int rows, int cols);
+static int backtrack(char **map, int rows, int cols, point_t const *target,
+	int x, int y, queue_t *path);
 
 /**
- * solve_maze - solves a maze using backtracking
- * @map: the map to navigate
- * @rows: number of rows
- * @cols: number of cols
- * @current: coordinates of the current position
- * @target: coordinates of the target position
- * @queue: the queue that holds the final path
- * @visited: array to keep track of visited cells
- * Return: 1 if found path, else 0
+ * make_copy - copy the map being backtracked over
+ * @original: the original copy of the map
+ * @x: rows in the map
+ * @y: columns of the map
+ *
+ * Return: a pointer to the copy of the new map.
 */
-static int solve_maze(char **map, int rows, int cols, point_t *current,
-							 point_t *target, queue_t *queue, int *visited)
-{
-	point_t next_move, *next_move_dup;
-
-	int directions[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}}, x, y;
-	int on_target_path = 0, i;
-
-	printf("Checking coordinates [%d, %d]\n", current->x, current->y);
-	visited[(current->y * cols) + current->x] = 1;
-	if (current->x == target->x && current->y == target->y)
-	{
-		next_move_dup = point_dup(current);
-		queue_push_front(queue, (void *)next_move_dup);
-		return (1);
-	}
-	for (i = 0; i < 4; ++i)
-	{
-		next_move.x = current->x + directions[i][0];
-		x = next_move.x;
-		next_move.y = current->y + directions[i][1];
-		y = next_move.y;
-
-		if (
-			(is_valid_move(map, rows, cols, &next_move)) &&
-			(!WAS_VISITED(visited, cols, x, y))
-		)
-			on_target_path += (
-				solve_maze(map, rows, cols, &next_move, target, queue, visited)
-			);
-		if (on_target_path)
-			break;
-	}
-	if (on_target_path)
-		return (
-			(queue_push_front(queue, (void *)point_dup(current)) != NULL)
-		);
-
-	return (0);
-}
-
-static map_t *copy_map_data(map_t *new_map, char **map_data)
+static char **make_copy(char **original, int x, int y)
 {
 	int i;
 
-	new_map->map = malloc(sizeof(char *) * new_map->rows);
-	if (new_map == NULL)
+	char **copy;
+
+	copy = malloc(x * sizeof(char *));
+	if (!copy)
 		return (NULL);
 
-	for (i = 0; i < new_map->rows; i++)
-		new_map->map[i] = malloc(sizeof(char) * new_map->cols);
-	
-	return (new_map);
+	for (i = 0; i < x; i++)
+	{
+		copy[i] = malloc(y + 1);
+		if (!copy[i])
+			return (NULL);
+		strcpy(copy[i], original[i]);
+	}
+	return (copy);
 }
 
-static map_t *init_map_struct(char **map, int rows, int cols)
+/**
+ * free_copy - deallocates memory used for copy
+ * @copy: the copy of the map used to backtrack over
+ * @rows: number of rows it included.
+ *
+*/
+static void free_copy(char **copy, int rows)
 {
-	map_t *new_map;
+	int i;
 
-	new_map = malloc(sizeof(map_t));
-	if (new_map == NULL)
+	for (i = 0; i < rows; i++)
+		free(copy[i]);
+	free(copy);
+}
+
+/**
+ * create_point - initalizes the point_t struct
+ * @x: the x value to store in point
+ * @y: the y value to store in point
+ *
+ * Return: Pointer to pointlessly eheap allocated struct
+*/
+static point_t *create_point(int x, int y)
+{
+	point_t *new_point;
+
+	new_point = calloc(1, sizeof(*new_point));
+	if (!new_point)
 		return (NULL);
 
-	new_map->rows = rows;
-	new_map->cols = cols;
+	new_point->x = x;
+	new_point->y = y;
 
-	return (
-		copy_map_data(new_map, map)
-	);
+	return (new_point);
 }
 
 /**
@@ -105,21 +89,71 @@ queue_t *backtracking_array(
 	point_t const *target
 )
 {
-	map_t *my_map;
-	queue_t *queue;
+	queue_t *path = queue_create(), *reverse_path = queue_create();
+	char **copy;
+	point_t *point;
 
-	int *visited = calloc(sizeof(int), (rows * cols));
+	if (!path || !reverse_path)
+		return (NULL);
 
-	my_map = init_map_struct(map, rows, cols);
-	queue = queue_create();
+	copy = make_copy(map, rows, cols);
 
-	solve_maze(map, rows, cols, start, target, queue, visited);
-
-	if (!queue->front)
+	if (backtrack(copy, rows, cols, target, start->x, start->y, path))
 	{
-		free(queue);
-		queue = NULL;
+		while ((point = dequeue(path)))
+			queue_push_front(reverse_path, point);
+		free(path);
 	}
-	free(visited);
-	return (queue);
+	else
+	{
+		free(path);
+		free(reverse_path);
+		reverse_path = NULL;
+	}
+	free_copy(copy, rows);
+
+	return (reverse_path);
+}
+
+/**
+ * backtrack - uses dfs backtracking to find path
+ * @map: map character grid
+ * @rows: number of rows in map
+ * @cols: number of columns in map
+ * @target: target point
+ * @x: current x coordinate
+ * @y: current y coordinate
+ * @path: current path queue
+ *
+ * Return: 1 if target reached else 0
+ */
+static int backtrack(char **map, int rows, int cols, point_t const *target,
+	int x, int y, queue_t *path)
+{
+	point_t *point;
+
+	if (CANT_BACKTRACK(x, y, cols, rows, map))
+		return (0);
+
+	map[y][x] = '1';
+
+	point = create_point(x, y);
+	if (point == NULL)
+		return (-1);
+
+	queue_push_front(path, point);
+
+	printf("Checking coordinates [%d, %d]\n", x, y);
+
+	if (REACHED_TARGET(target, x, y))
+		return (1);
+
+	if (backtrack(map, rows, cols, target, x + 1, y, path) ||
+		backtrack(map, rows, cols, target, x, y + 1, path) ||
+		backtrack(map, rows, cols, target, x - 1, y, path) ||
+		backtrack(map, rows, cols, target, x, y - 1, path))
+		return (1);
+	free(dequeue(path));
+
+	return (0);
 }
