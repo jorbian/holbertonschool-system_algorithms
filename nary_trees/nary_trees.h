@@ -28,7 +28,7 @@ typedef void (*action_t)(nary_tree_t const *, size_t);
 
 nary_tree_t *nary_tree_insert(nary_tree_t *parent, char const *str);
 void nary_tree_delete(nary_tree_t *tree);
-size_t nary_tree_traverse(nary_tree_t const *root, action_t);
+size_t nary_tree_traverse(nary_tree_t *root, action_t);
 size_t nary_tree_diameter(nary_tree_t const *root);
 int path_exists(nary_tree_t const *root, char const * const *path);
 
