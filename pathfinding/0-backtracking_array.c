@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "pathfinding.h"
 
 static map_t *copy_map_data(map_t *new_map, char **map_data);
