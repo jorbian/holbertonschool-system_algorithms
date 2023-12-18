@@ -2,23 +2,20 @@
 
 #include "nary_trees.h"
 
+
 /**
- * copy_content - copy the content string into the node
- * @node: pointer to the new node in the string
- * @str: the string being copied into node
+ * free_node - checks if node had content buffer and then frees it and buffer
+ * @node: the node being freed
  *
- * Return: Pointer back to the new node or NULL
+ * Return: ALWAYS NULL
 */
-static nary_tree_t *copy_content(nary_tree_t *node, char const *str)
+static nary_tree_t *free_node(nary_tree_t *node)
 {
-	node->content = malloc(
-		sizeof(char) * strlen(str)
-	);
 	if (node->content)
-	{
-		strcpy(node->content, str);
-		return (node);
-	}
+		free(node->content);
+
+	free(node);
+
 	return (NULL);
 }
 
@@ -31,39 +28,29 @@ static nary_tree_t *copy_content(nary_tree_t *node, char const *str)
 */
 nary_tree_t *nary_tree_insert(nary_tree_t *parent, char const *str)
 {
-	nary_tree_t *new_node, *last_child;
+	nary_tree_t *new_node;
 
-	if (!str)
-		return (NULL);
+	char *node_content;
 
 	new_node = malloc(sizeof(nary_tree_t));
-	if (!new_node)
-	{
+	if (new_node == NULL)
 		return (NULL);
-	}
-	if (NODE_WAS_NOT_COPIED(new_node, str))
-	{
-		return (NULL);
-	}
-	printf("%s", "");
-	new_node->parent = parent;
-	new_node->nb_children = 0;
+
+	node_content = strdup(str);
+	if (node_content == NULL)
+		return (free_node(new_node));
+
 	new_node->children = NULL;
+	new_node->content = node_content;
+	new_node->nb_children = 0;
 	new_node->next = NULL;
+	new_node->parent = parent;
 
-	if (!new_node->parent)
-		return (new_node);
-
-	if (!parent->children)
-		parent->children = new_node;
-	else
+	if (parent)
 	{
-		last_child = parent->children;
-		while (last_child->next)
-			last_child = last_child->next;
-		last_child->next = new_node;
+		new_node->next = parent->children;
+		parent->children = new_node;
+		parent->nb_children++;
 	}
-	parent->nb_children++;
-
 	return (new_node);
 }
