@@ -10,10 +10,10 @@ static vertex_t const *g_target;
 static graph_t *g_graph;
 
 /**
- * dfs - uses depth-first search to find path
+ * depth_first_search - uses depth-first search to find path
  * @vertex: current vertex to traverse
  *
- * Return: '1' if destination was found else 0
+ * Return: '1' if destination was found else '0'
  */
 int depth_first_search(vertex_t *vertex)
 {
