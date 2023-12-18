@@ -6,7 +6,10 @@
 
 #define REACHED_TARGET(t, x, y) (x == target->x && y == target->y)
 #define CHECK_SIDE(axis, value) ((axis < 0) || (x >= value))
-#define CANT_BACKTRACK(x, y, c, r, m) ((CHECK_SIDE(x, c)) || CHECK_SIDE(y, r) || (m[y][x] != '0'))
+#define CANT_BACKTRACK(x, y, c, r, m) ( \
+	(CHECK_SIDE(x, c)) || \
+	(CHECK_SIDE(y, r)) || \
+	(m[y][x] != '0'))
 
 /**
  * struct point_s - Structure storing coordinates
@@ -21,7 +24,7 @@ typedef struct point_s
 } point_t;
 
 /**
- * struct point_s - Structure storing coordinates
+ * struct map_s - Structure storing coordinates
  * @map: pointer to a read-only two-dimensional array
  * @rows: X coordinate
  * @cols: Y coordinate
