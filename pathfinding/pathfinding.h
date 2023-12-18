@@ -4,7 +4,7 @@
 #include "graphs.h"
 #include "queues.h"
 
-#define REACHED_TARGET(t, x, y) (x == target->x && y == target->y)
+#define REACHED_TARGET(t, x, y) (x == t->x && y == t->y)
 #define CHECK_SIDE(axis, value) ((axis < 0) || (x >= value))
 #define CANT_BACKTRACK(x, y, c, r, m) ( \
 	(CHECK_SIDE(x, c)) || \
@@ -36,16 +36,8 @@ typedef struct map_s
 	int cols;
 } map_t;
 
-queue_t *backtracking_array(
-	char **map,
-	int rows,
-	int cols,
-	point_t const *start,
-	point_t const *target
-);
-queue_t *backtracking_graph(
-	graph_t *graph, vertex_t const *start, vertex_t const *target
-);
+queue_t *backtracking_array(char **, int, int, point_t *, point_t *);
+queue_t *backtracking_graph(graph_t *graph, vertex_t *start, vertex_t *target);
 queue_t *dijkstra_graph(
 	graph_t *graph,
 	vertex_t const *start,

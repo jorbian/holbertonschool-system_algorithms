@@ -4,8 +4,7 @@
 
 #include "pathfinding.h"
 
-static int backtrack(char **map, int rows, int cols, point_t const *target,
-	int x, int y, queue_t *path);
+static int backtrack(char **, int, int, point_t *, int, int, queue_t *);
 
 /**
  * make_copy - copy the map being backtracked over
@@ -73,21 +72,15 @@ static point_t *create_point(int x, int y)
 
 /**
  * backtracking_array - search for first path from a starting point to target.
- * @map: pointer to a read-only two-dimensional array
- * @rows: rows of map
- * @cols: columns of map
- * @start: stores the coordinates of the starting point
- * @target: stores the coordinates of the target point
+ * @m: pointer to a read-only two-dimensional array
+ * @rs: rows of map
+ * @cs: columns of map
+ * @st: stores the coordinates of the starting point
+ * @tg: stores the coordinates of the target point
  *
  * Return: queue in which each node is a point in the path from start to target
 */
-queue_t *backtracking_array(
-	char **map,
-	int rows,
-	int cols,
-	point_t const *start,
-	point_t const *target
-)
+queue_t *backtracking_array(char **m, int rs, int cs, point_t *st, point_t *tg)
 {
 	queue_t *path = queue_create(), *reverse_path = queue_create();
 	char **copy;
@@ -96,9 +89,9 @@ queue_t *backtracking_array(
 	if (!path || !reverse_path)
 		return (NULL);
 
-	copy = make_copy(map, rows, cols);
+	copy = make_copy(m, rs, cs);
 
-	if (backtrack(copy, rows, cols, target, start->x, start->y, path))
+	if (backtrack(copy, rs, cs, tg, st->x, st->y, path))
 	{
 		while ((point = dequeue(path)))
 			queue_push_front(reverse_path, point);
@@ -110,50 +103,51 @@ queue_t *backtracking_array(
 		free(reverse_path);
 		reverse_path = NULL;
 	}
-	free_copy(copy, rows);
+	free_copy(copy, rs);
 
 	return (reverse_path);
 }
 
 /**
  * backtrack - uses dfs backtracking to find path
- * @map: map character grid
- * @rows: number of rows in map
- * @cols: number of columns in map
- * @target: target point
+ * @m: map character grid
+ * @rs: number of rows in map
+ * @cs: number of columns in map
+ * @tg: target point
  * @x: current x coordinate
  * @y: current y coordinate
- * @path: current path queue
+ * @p: current path queue
  *
  * Return: 1 if target reached else 0
  */
-static int backtrack(char **map, int rows, int cols, point_t const *target,
-	int x, int y, queue_t *path)
+static int backtrack(
+	char **m, int rs, int cs, point_t *tg, int x, int y, queue_t *p
+)
 {
 	point_t *point;
 
-	if (CANT_BACKTRACK(x, y, cols, rows, map))
+	if (CANT_BACKTRACK(x, y, cs, rs, m))
 		return (0);
 
-	map[y][x] = '1';
+	m[y][x] = '1';
 
 	point = create_point(x, y);
 	if (point == NULL)
 		return (-1);
 
-	queue_push_front(path, point);
+	queue_push_front(p, point);
 
 	printf("Checking coordinates [%d, %d]\n", x, y);
 
-	if (REACHED_TARGET(target, x, y))
+	if (REACHED_TARGET(tg, x, y))
 		return (1);
 
-	if (backtrack(map, rows, cols, target, x + 1, y, path) ||
-		backtrack(map, rows, cols, target, x, y + 1, path) ||
-		backtrack(map, rows, cols, target, x - 1, y, path) ||
-		backtrack(map, rows, cols, target, x, y - 1, path))
+	if (backtrack(m, rs, cs, tg, x + 1, y, p) ||
+		backtrack(m, rs, cs, tg, x, y + 1, p) ||
+		backtrack(m, rs, cs, tg, x - 1, y, p) ||
+		backtrack(m, rs, cs, tg, x, y - 1, p))
 		return (1);
-	free(dequeue(path));
+	free(dequeue(p));
 
 	return (0);
 }
