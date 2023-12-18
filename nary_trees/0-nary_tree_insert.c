@@ -34,6 +34,24 @@ static void initalize_fields(nary_tree_t *node, char *content)
 }
 
 /**
+ * adjust_parent_node - adjusts the parent to make sure information is right
+ * @node: the node being created
+ * @parent: pointer to the parent
+ *
+*/
+static void adjust_parent_node(nary_tree_t *node, nary_tree_t *parent)
+{
+	node->parent = parent;
+
+	if (parent)
+	{
+		node->next = parent->children;
+		parent->children = node;
+		parent->nb_children++;
+	}
+}
+
+/**
  * nary_tree_insert - function that inserts a node in a N-ary tree.
  * @parent: a pointer to the parent node.
  * @str: string to be stored in the created node. It must be duplicated.
@@ -55,14 +73,7 @@ nary_tree_t *nary_tree_insert(nary_tree_t *parent, char const *str)
 		return (free_node(new_node));
 
 	initalize_fields(new_node, node_content);
+	adjust_parent_node(new_node, parent);
 
-	new_node->parent = parent;
-
-	if (parent)
-	{
-		new_node->next = parent->children;
-		parent->children = new_node;
-		parent->nb_children++;
-	}
 	return (new_node);
 }
